@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" 
+    rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" 
+    crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" 
+    integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" 
+    crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+
+</head>
+<body>
+<div id="app"></div>
+<script src="https://unpkg.com/react@17/umd/react.development.js"></script>
+<script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+<!-- Babel Script -->
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.4/jspdf.debug.js"></script>
+<script type="text/javascript" src="jspdf.main.js"></script>
+
+
+<script type="text/jsx">
+    const app = document.getElementById('app');
+    
+    var Item = ({text, url, icon}) => {
+            return (
+                <li className="nav-item">
+                    <a href={url} className="nav-Link text-light">
+                    {text + " "}
+                    <i className={icon}></i>
+                    </a>
+                </li>
+            );
+        }
+
+        var Encabezado = () => {
+            return(
+            <div className="container">
+            <header className="text-center bg-dark text-light py-3 my-2">
+                <h1 className="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom"
+                >Becas Academicas</h1>
+          
+            <ul className="nav nav-pills justify-content-center">
+                <a className="nav-Link btn btn-outline-primary">
+                        <Item 
+                        text=""
+                        url="Facebook.com"
+                        icon="bi bi-facebook"
+                        />
+                </a>
+                <a className="nav-Link btn btn-outline-success">
+                        <Item 
+                        text=""
+                        url="whatsapp.com"
+                        icon="bi bi-whatsapp"
+                        />
+                    </a>
+                    <a className="nav-Link btn btn-outline-info">
+                        <Item 
+                        text=""
+                        url="https://twitter.com/?lang=es"
+                        icon="bi bi-twitter"
+                        />
+                    </a>
+                    <a className="nav-Link btn btn-outline-warning">
+                        <Item 
+                        text=""
+                        url="instagram.com"
+                        icon="bi bi-instagram"
+                        />
+                    </a>
+                    <a className="nav-Link btn btn-outline-danger">
+                        <Item 
+                        text=""
+                        url="youtube.com"
+                        icon="bi bi-youtube"
+                        />
+                    </a>
+            </ul>      
+            </header>
+
+
+            </div>
+            );
+        }
+        var Input= ({ col, f, text, name, type, id, placeholder, textVF= "¡Correcto!⭐", textIF }) =>{
+            var validText = (text) =>{
+                if(text==""){
+                return "¡Correcto!⭐"
+                }else {
+                    return text
+                }
+            }
+        return(
+            <div className={col}>
+                <label htmlFor="{f}" className="form-label">{text}</label>
+                <input name={name} type={type} className="form-control" id={id}
+                    placeholder={placeholder} required />
+                    <div className="valid-feedback">
+                        {validText(textVF)}
+                    </div>
+                    <div className="invalid-feedback">
+                       Debe ingresar: {textIF} 😡
+                    </div>
+            </div>
+        );
+        }
+        var InputSelect = ({col, f, text, name, id, options}) =>{
+
+return(
+    <div className={col}>
+        <label htmlFor={f} className="form-label"> {text}</label>
+        <select name={name} className="form-select" id={id} required>
+            {
+                options.map((op)=> (
+                    <option value={op}>{op}</option>
+                ))
+            }
+
+        </select>
+
+            <div className="valid-feedback">
+                "¡Correcto! ⭐"
+
+            </div>
+
+    </div>
+);
+}
+
+var InputDate =({col, f, text, name, type, id}) =>{
+
+return (
+    <div className={col}>
+        <label htmlFor={f} className="form-label">{text} </label>
+        <input name={name} type={type} className="form-control" id={id} disable/>
+
+    </div>
+       )
+      }
+
+class Boton extends React.Component {
+      handleClick() {
+        const form = document.getElementById("Formulario");
+        if (form.checkValidity() === false) {
+          event.preventDefault();
+          event.stopPropagation();
+          form.classList.add('was-validated');
+        } else {
+          const NombreCompleto=document.getElementById('nombrecompleto').value;
+          const CorreElectronico=document.getElementById('correo').value;
+          const Contraseña=document.getElementById('contraseña').value;
+          const Fecha=document.getElementById('fecha').value;
+          const Sexo=document.getElementById('sexo').value;
+        
+          const doc=new jsPDF();
+          doc.text(60,10,"Datos Personales");
+          doc.text(30,30,"Nombre Completo:  "+NombreCompleto);
+          
+          doc.text(30,55,"Correo Electronico: "+CorreElectronico);
+          
+          doc.text(30,85,"Contraseña: "+Contraseña);
+          
+          doc.text(30,105,"Fecha: "+Fecha);
+          
+          doc.text(30,125,"Sexo: "+Sexo);
+          
+          
+         
+          doc.save("Datos Personales.pdf");
+        }
+      }
+      render() {
+        return (
+          <div className="px-4 text-center">
+            <div className="container">
+              <main>
+                <form id="Formulario" className="needs-validation mt-5" method="POST" action="https://formsubmit.co/javieraleiva026@gmail.com"
+                  noValidate>
+
+                  <Formulario/>
+
+
+                  <hr className="d-grid gap-2 col-6 mx-auto"></hr>
+                  <button onClick={this.handleClick.bind(this)} type="submit" className="btn btn-outline-primary">
+                    Generar Cita
+                  </button>
+                  <hr />
+                </form>
+              </main>
+            </div>
+          </div>
+        );
+      }
+    }
+
+    var Formulario=()=> {
+        var sexo =["masculino","femenino"]
+        return(
+                <div className="px-4 text-center">
+                    <div className="container text-center bg-dark text-light py-3 my-2">
+                        <main>
+                            <h4>Datos Personales❤</h4>
+                    
+                            <div className="input-group row g-3">
+                                    <div className="row g-3">
+                                        <Input
+                                        col="col-md-6"
+                                        f="nombrecompleto"
+                                        text="✨Nombre Completo:"
+                                        name="NombreCompleto"
+                                        type="text"
+                                        id="nombrecompleto"
+                                        placeholder="Ingrese su NombreCompleto"
+                                        />
+                                        <Input
+                                        col="col-md-6"
+                                        f="correo"
+                                        text="✨Correo Electronico"
+                                        name="CorreElectronico"
+                                        type="email"
+                                        id="correo"
+                                        placeholder="Ingrese su correo"
+                                        />
+                                        <Input
+                                        col="col-md-6"
+                                        f="contraseña"
+                                        text="✨Contraseña:"
+                                        name="Contraseña"
+                                        type="password"
+                                        id="contraseña"
+                                        placeholder=""
+                                        />
+                                        <Input
+                                        col="col-md-6"
+                                        f="fecha"
+                                        text="✨Fecha: "
+                                        name="Fecha"
+                                        type="date"
+                                        id="fecha"
+                                        placeholder=""
+                                        />
+                                        <InputSelect
+                                        col="col-md-6"
+                                        f="Sexo"
+                                        text="👩👨Sexo: "
+                                        name="Sexo"
+                                        options={sexo}
+                                        id="sexo"
+                                       
+                                        />
+                                        
+                                </div>
+
+                             
+                            </div>     
+                        </main>           
+                    </div>
+                    
+                </div>
+                         
+            );
+        }  
+        var APP = () =>{
+            return(
+            <>
+             <Encabezado/>
+             <Boton/>
+            
+            </>
+            );
+        }
+        (() => {
+            'use strict'
+            
+            const forms = document.querySelectorAll('.needs-validation');
+
+            Array.from(forms).forEach( form => {
+                form.addEventListener('submit', event => {
+                    
+                    if ( !form.checkValidity() ) {
+
+                        event.preventDefault();
+                        event.stopPropagation();
+
+                    }
+
+                    form.classList.add( 'was-validated' );
+
+                }, false)
+            })
+        })()
+        ReactDOM.render(<APP />, app);
+
+
+</script>
+</body>
+</html>
